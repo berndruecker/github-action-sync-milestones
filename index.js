@@ -20,18 +20,13 @@ async function run() {
       // The YML workflow will need to set myToken with the GitHub Secret Token
       // myToken: ${{ secrets.GITHUB_TOKEN }}
       // https://help.github.com/en/actions/automating-your-workflow-with-github-actions/authenticating-with-the-github_token#about-the-github_token-secret
-    const myToken = core.getInput('github-token');
+    const githubToken = core.getInput('github-token');
     const webmodelerClientId = core.getInput('webmodeler-client-id');
     const webmodelerClientSecret = core.getInput('webmodeler-client-secret');
 
-    console.log(myToken)
-    const octokit = github.getOctokit(myToken);
-
-    //console.log("Let's go");
-    //core.info("Let's go");
-
-    console.log(webmodelerClientId);
-    console.log(webmodelerClientSecret);
+    if (!github or !webmodelerClientId or !webmodelerClientSecret) {
+      core.setFailed(You need to set GITHUB_TOKEN and WEB_MODELER CREDENTIALS);
+    }
 
     // Get Web Modeler Milestones 
     let tokenResponse = await fetch("https://login.cloud.camunda.io/oauth/token", {
@@ -45,11 +40,7 @@ async function run() {
       })
     });
 
-    const tokenJson = await tokenResponse.json();
-    console.log(tokenJson);
-    let webModelerToken = tokenJson.access_token;
-    console.log(webModelerToken);
-
+    const webModelerToken = await tokenResponse.json().access_token;
     let milestoneResponse = await fetch("https://modeler.cloud.camunda.io/api/v1/milestones/search", {
       method: "POST",
       headers: { 
@@ -58,11 +49,12 @@ async function run() {
       },
       body: JSON.stringify({})
     });
-    console.log(milestoneResponse);
-    let milestones = await milestoneResponse.json();
+    let milestones = await milestoneResponse.json().items;
     console.log(milestones);
 
 
+    // Get branches from GitHub
+    const octokit = github.getOctokit(githubToken);
     const [ghOwner, ghRepo] = process.env.GITHUB_REPOSITORY.split("/");
 
     let branches = await octokit.request('GET /repos/{owner}/{repo}/branches', {
@@ -71,10 +63,10 @@ async function run() {
       headers: {
         'X-GitHub-Api-Version': '2022-11-28'
       }
-    })
+    }).data
 
-    console.log(ghOwner + "/" + ghRepo);
-    console.log(branches.data);
+    //console.log(ghOwner + "/" + ghRepo);
+    console.log(branches);
     //console.log(process.env.GITHUB_REPOSITORY);
 
     // Get all GH Branches
