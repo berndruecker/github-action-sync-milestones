@@ -21,7 +21,7 @@ module.exports = async ({ github, context }) => {
 
 
     // Get Web Modeler Milestones 
-    const tokenResponse = await fetch(" https://login.cloud.camunda.io/oauth/token", {
+    let tokenResponse = await fetch(" https://login.cloud.camunda.io/oauth/token", {
       method: "POST",
       headers: { "Content-type": "application/json" },
       body: JSON.stringify({
@@ -35,7 +35,7 @@ module.exports = async ({ github, context }) => {
 
 
     // Get all GH Branches
-    const branchesListResponse == await octokit.branches(github.context.repository_owner + "/" + github.context.repository)  
+    let branchesListResponse == await octokit.branches(github.context.repository_owner + "/" + github.context.repository)  
     console.log(branchesListResponse)  
 
     // Check if for every milestone exists an branch
