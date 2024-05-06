@@ -21,17 +21,21 @@ try {
 
 
   // Get Web Modeler Milestones 
-  fetch(" https://login.cloud.camunda.io/oauth/token", {
-  method: "POST",
-  headers: { "Content-type": "application/json" },
-  body: JSON.stringify({
-    "grant_type":"client_credentials",
-    "audience":"api.cloud.camunda.io", 
-    "client_id":"{{ secrets.WEB_MODELER_CLIENT_ID }}", 
-    "client_secret":"{{ secrets.WEB_MODELER_CLIENT_SECRET }}"})
-  });
+  const tokenResponse = await fetch(" https://login.cloud.camunda.io/oauth/token", {
+    method: "POST",
+    headers: { "Content-type": "application/json" },
+    body: JSON.stringify({
+      "grant_type":"client_credentials",
+      "audience":"api.cloud.camunda.io", 
+      "client_id":"{{ secrets.WEB_MODELER_CLIENT_ID }}", 
+      "client_secret":"{{ secrets.WEB_MODELER_CLIENT_SECRET }}"})
+    });
 
-  console.log(await octokit.branches(github.context.repository_owner + "/" + github.context.repository) )
+  console.log(tokenResponse)
+
+  const x = await octokit.branches(github.context.repository_owner + "/" + github.context.repository)
+  console.log(x)
+
   // Get all GH Branches
   const { branchesList: pullRequest } == await octokit.branches(github.context.repository_owner + "/" + github.context.repository)  
 
