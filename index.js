@@ -17,9 +17,9 @@ module.exports = async ({ github, context }) => {
       // myToken: ${{ secrets.GITHUB_TOKEN }}
       // https://help.github.com/en/actions/automating-your-workflow-with-github-actions/authenticating-with-the-github_token#about-the-github_token-secret
       const myToken = core.getInput('myToken');
-      const octokit = github.getOctokit(myToken)
+      const octokit = github.getOctokit(myToken);
 
-    core.info("Let's go")
+    core.info("Let's go");
 
     // Get Web Modeler Milestones 
     let tokenResponse = await fetch(" https://login.cloud.camunda.io/oauth/token", {
@@ -32,12 +32,12 @@ module.exports = async ({ github, context }) => {
         "client_secret":"{{ secrets.WEB_MODELER_CLIENT_SECRET }}"})
       });
 
-    core.info(tokenResponse)
+    core.info(tokenResponse);
 
 
     // Get all GH Branches
-    let branchesListResponse = await octokit.branches(github.context.repository_owner + "/" + github.context.repository)  
-    core.info(branchesListResponse)  
+    let branchesListResponse = await octokit.branches(github.context.repository_owner + "/" + github.context.repository);
+    core.info(branchesListResponse);
 
     // Check if for every milestone exists an branch
 
@@ -49,6 +49,7 @@ module.exports = async ({ github, context }) => {
 
 
   } catch (error) {
+    core.warning(error);
     core.setFailed(error.message);
   }
 }
