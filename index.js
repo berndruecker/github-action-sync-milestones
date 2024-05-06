@@ -30,8 +30,11 @@ async function run() {
     //console.log("Let's go");
     //core.info("Let's go");
 
+    console.log(webmodelerClientId);
+    console.log(webmodelerClientSecret);
+    
     // Get Web Modeler Milestones 
-    let tokenResponse = await fetch(" https://login.cloud.camunda.io/oauth/token", {
+    let tokenResponse = await fetch("https://login.cloud.camunda.io/oauth/token", {
       method: "POST",
       headers: { "Content-type": "application/json" },
       body: JSON.stringify({
