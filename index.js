@@ -99,7 +99,7 @@ async function run() {
 
         // get file content
         let fileResponse = await fetch("https://modeler.cloud.camunda.io/api/v1/files/" + milestone.fileId, {
-          method: "POST",
+          method: "GET",
           headers: { 
             "Content-type": "application/json",
             "Authorization": "Bearer " + webModelerToken
