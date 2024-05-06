@@ -9,7 +9,7 @@ module.exports = async ({ github, context }) => {
     core.setOutput("time", time);
     // Get the JSON webhook payload for the event that triggered the workflow
     const payload = JSON.stringify(github.context.payload, undefined, 2)
-    console.log(`The event payload: ${payload}`);
+    core.debug(`The event payload: ${payload}`);
 
 
       // This should be a token with access to your repository scoped in as a secret.
@@ -31,12 +31,12 @@ module.exports = async ({ github, context }) => {
         "client_secret":"{{ secrets.WEB_MODELER_CLIENT_SECRET }}"})
       });
 
-    console.log(tokenResponse)
+    core.info(tokenResponse)
 
 
     // Get all GH Branches
     let branchesListResponse = await octokit.branches(github.context.repository_owner + "/" + github.context.repository)  
-    console.log(branchesListResponse)  
+    core.info(branchesListResponse)  
 
     // Check if for every milestone exists an branch
 
