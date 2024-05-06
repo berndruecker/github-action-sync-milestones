@@ -12,7 +12,7 @@ async function run() {
     core.setOutput("time", time);
     // Get the JSON webhook payload for the event that triggered the workflow
     const payload = JSON.stringify(github.context.payload, undefined, 2)
-    core.debug(`The event payload: ${payload}`);
+    console.log(`The event payload: ${payload}`);
 
 
       // This should be a token with access to your repository scoped in as a secret.
@@ -20,6 +20,7 @@ async function run() {
       // myToken: ${{ secrets.GITHUB_TOKEN }}
       // https://help.github.com/en/actions/automating-your-workflow-with-github-actions/authenticating-with-the-github_token#about-the-github_token-secret
       //const myToken = core.getInput('myToken');
+    console.log(github.token)
       const octokit = github.getOctokit(github.token);
 
     core.info("Let's go");
