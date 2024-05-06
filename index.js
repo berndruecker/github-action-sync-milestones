@@ -60,6 +60,15 @@ async function run() {
     const octokit = github.getOctokit(githubToken);
     const [ghOwner, ghRepo] = process.env.GITHUB_REPOSITORY.split("/");
 
+    let mainBranchJson = await octokit.request('GET /repos/{owner}/{repo}/branches/main', {
+      owner: ghOwner,
+      repo: ghRepo,
+      headers: {
+        'X-GitHub-Api-Version': '2022-11-28'
+      }
+    });
+    let mainBranchSha = mainBranchJson.commit.sha;
+
     let branchesJson = await octokit.request('GET /repos/{owner}/{repo}/branches', {
       owner: ghOwner,
       repo: ghRepo,
@@ -74,8 +83,47 @@ async function run() {
 
     for (const milestone of milestones) {
       // Check if for every milestone exists an branch
-      if (!branches.some(b => b.name === "CAM_" + milestone.id)) {
+      if (!branches.some(b => b.name === "CAMUNDA_" + milestone.id)) {
         console.log("CREATE " + milestone.name);
+
+        let branchesJson = await octokit.request('POST /repos/{owner}/{repo}/git/refs', {
+          owner: ghOwner,
+          repo: ghRepo,
+          ref: "refs/heads/CAMUNDA_" + milestone.id, 
+          sha: mainBranchSha,
+          headers: {
+            'X-GitHub-Api-Version': '2022-11-28'
+          }
+        });
+
+        // get file content
+        let fileResponse = await fetch("https://modeler.cloud.camunda.io/api/v1/files/" + milestone.fileId, {
+          method: "POST",
+          headers: { 
+            "Content-type": "application/json",
+            "Authorization": "Bearer " + webModelerToken
+          },
+          body: JSON.stringify({})
+        });
+        console.log(fileResponse);
+        let fileResponseJson = await fileResponse.json();
+        console.log(fileResponseJson);
+        let fileContent = fileResponseJson.content;
+        console.log(fileContent);
+        
+        // push to GitHub
+        octokit.repos.createOrUpdateFile({
+          ghOwner,
+          ghRepo,
+          "src/main/resources",
+          "Updates synced from Camunda Web Modeler",
+          fileContent,
+          "Bernd Ruecker", // Committer
+          "bernd.ruecker@amunda.com",
+          "Bernd Ruecker", // Auhor
+          "bernd.ruecker@amunda.com"
+        });
+
       } else {
         console.log("NOPE " + milestone.name);
 
