@@ -59,7 +59,7 @@ async function run() {
       body: JSON.stringify({})
     });
     console.log(milestoneResponse);
-    let milestones = milestoneResponse.json();
+    let milestones = await milestoneResponse.json();
     console.log(milestones);
 
 
