@@ -6,13 +6,14 @@ run();
 async function run() {
   try {
     // `who-to-greet` input defined in action metadata file
-    const nameToGreet = core.getInput('who-to-greet');
-    console.log(`Hello ${nameToGreet}!`);
-    const time = (new Date()).toTimeString();
-    core.setOutput("time", time);
-    // Get the JSON webhook payload for the event that triggered the workflow
+    //const nameToGreet = core.getInput('who-to-greet');
+    //console.log(`Hello ${nameToGreet}!`);
+    //const time = (new Date()).toTimeString();
+    //core.setOutput("time", time);
+    
+    // Get the JSON webhook payload for the event that triggered the workflow    
     const payload = JSON.stringify(github.context.payload, undefined, 2)
-    console.log(`The event payload: ${payload}`);
+    //console.log(`The event payload: ${payload}`);
 
 
       // This should be a token with access to your repository scoped in as a secret.
@@ -39,10 +40,22 @@ async function run() {
 
     console.log(tokenResponse);
 
-console.log(github.context.repository_owner + "/" + github.context.repository);
+    const [ghOwner, ghRepo] = process.env.GITHUB_REPOSITORY.split("/");
+
+    let branches = await octokit.request('GET /repos/{owner}/{repo}/branches', {
+      owner: ghOwner,
+      repo: ghRepo,
+      headers: {
+        'X-GitHub-Api-Version': '2022-11-28'
+      }
+    })
+
+    console.log(ghOwner + "/" + ghRepo);
+    console.log(branches);
+    //console.log(process.env.GITHUB_REPOSITORY);
 
     // Get all GH Branches
-    let branchesListResponse = await octokit.getRepo(github.context.repository_owner, github.context.repository).getBranches();
+    let branchesListResponse = await octokit.rest.getRepo(process.env.GITHUB_REPOSITORY).getBranches();
     console.log(branchesListResponse);
 
     // Check if for every milestone exists an branch
