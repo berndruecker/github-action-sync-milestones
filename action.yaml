@@ -7,6 +7,12 @@ inputs:
     default: 'World'
   github-token: 
     description: 'Github Access Token'
+    required: true
+  webmodeler-client-id: 
+    description: 'Camunda Web Modeler Client Id'
+    required: true
+  webmodeler-client-secret: 
+    description: 'Camunda Web Modeler Client Secret'
     required: true    
 outputs:
   time: # id of output
