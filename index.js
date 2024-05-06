@@ -40,7 +40,8 @@ async function run() {
       })
     });
 
-    const webModelerToken = await tokenResponse.json().access_token;
+    const tokenResponseJson = await tokenResponse.json();
+    const webModelerToken = tokenResponseJson.access_token;
     let milestoneResponse = await fetch("https://modeler.cloud.camunda.io/api/v1/milestones/search", {
       method: "POST",
       headers: { 
@@ -49,7 +50,9 @@ async function run() {
       },
       body: JSON.stringify({})
     });
-    let milestones = await milestoneResponse.json();
+    let milestonesJson = await milestoneResponse.json();
+    console.log(milestonesJson);
+    let milestones = milestonesJson.items;
     console.log(milestones);
 
 
@@ -57,7 +60,7 @@ async function run() {
     const octokit = github.getOctokit(githubToken);
     const [ghOwner, ghRepo] = process.env.GITHUB_REPOSITORY.split("/");
 
-    let branches = await octokit.request('GET /repos/{owner}/{repo}/branches', {
+    let branchesJson = await octokit.request('GET /repos/{owner}/{repo}/branches', {
       owner: ghOwner,
       repo: ghRepo,
       headers: {
@@ -65,11 +68,13 @@ async function run() {
       }
     });
 
+    console.log(branchesJson);
+    let branches = branchesJson.data;
     console.log(branches);
 
-    for (const milestone of milestones.items) {
+    for (const milestone of milestones) {
       // Check if for every milestone exists an branch
-      if (!branches.data.some(b => b.name === "CAM_" + milestone.id)) {
+      if (!branches.some(b => b.name === "CAM_" + milestone.id)) {
         console.log("CREATE " + milestone);
       } else {
         console.log("NOPE " + milestone);
