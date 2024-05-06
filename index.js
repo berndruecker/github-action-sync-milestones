@@ -33,11 +33,10 @@ module.exports = async ({ github, context }) => {
 
     console.log(tokenResponse)
 
-    const x = await octokit.branches(github.context.repository_owner + "/" + github.context.repository)
-    console.log(x)  
 
     // Get all GH Branches
-    const { branchesList: pullRequest } == await octokit.branches(github.context.repository_owner + "/" + github.context.repository)  
+    const branchesListResponse == await octokit.branches(github.context.repository_owner + "/" + github.context.repository)  
+    console.log(branchesListResponse)  
 
     // Check if for every milestone exists an branch
 
