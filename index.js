@@ -25,7 +25,7 @@ async function run() {
     const webmodelerClientSecret = core.getInput('webmodeler-client-secret');
 
     if (!github || !webmodelerClientId || !webmodelerClientSecret) {
-      core.setFailed(You need to set GITHUB_TOKEN and WEB_MODELER CREDENTIALS);
+      core.setFailed("You need to set GITHUB_TOKEN and WEB_MODELER CREDENTIALS");
     }
 
     // Get Web Modeler Milestones 
