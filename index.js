@@ -1,5 +1,6 @@
 const core = require('@actions/core');
 const github = require('@actions/github');
+//const { Octokit } = require("@octokit/rest");
 
 run();
 
@@ -113,7 +114,7 @@ async function run() {
         const contentEncoded = btoa(fileContent);
         
         // push to GitHub
-        octokit.repos.createOrUpdateFile({
+        octokit.rest.repos.createOrUpdateFile({
           owner: ghOwner,
           repo: ghRepo,
           path: "src/main/resources/test.bpmn",
