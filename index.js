@@ -124,7 +124,7 @@ async function run() {
         octokit.rest.repos.createOrUpdateFileContents({
           owner: ghOwner,
           repo: ghRepo,
-          path: "src/main/resources/" + fileResponseJson.simplePath,
+          path: "src/main/resources/" + fileResponseJson.metadata.simplePath,
           message: "Synchronized model from Camunda Web Modeler",
           content: contentEncoded,
           branch: "CAMUNDA_" + milestone.id
