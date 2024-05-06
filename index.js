@@ -75,9 +75,9 @@ async function run() {
     for (const milestone of milestones) {
       // Check if for every milestone exists an branch
       if (!branches.some(b => b.name === "CAM_" + milestone.id)) {
-        console.log("CREATE " + milestone);
+        console.log("CREATE " + milestone.name);
       } else {
-        console.log("NOPE " + milestone);
+        console.log("NOPE " + milestone.name);
 
       }
 
