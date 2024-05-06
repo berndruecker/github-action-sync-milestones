@@ -49,7 +49,14 @@ async function run() {
         "Content-type": "application/json",
         "Authorization": "Bearer " + webModelerToken
       },
-      body: JSON.stringify({})
+      body: JSON.stringify({
+        "sort": [
+          {
+            "field": "created",
+            "direction": "DESC"
+        }],
+        size: 50
+      })
     });
     let milestonesJson = await milestoneResponse.json();
     //console.log(milestonesJson);
@@ -118,13 +125,16 @@ async function run() {
           owner: ghOwner,
           repo: ghRepo,
           path: "src/main/resources/" + fileResponseJson.simplePath,
-          message: "Updates synced from Camunda Web Modeler",
+          message: "Synchronized model from Camunda Web Modeler",
           content: contentEncoded,
           branch: "CAMUNDA_" + milestone.id
                     //"Bernd Ruecker", // Committer
           //"bernd.ruecker@amunda.com",
           //"Bernd Ruecker", // Auhor
           //"bernd.ruecker@amunda.com"
+
+          // deploy to production system via API
+
         });
 
       } else {
