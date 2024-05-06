@@ -110,7 +110,7 @@ async function run() {
         console.log(fileResponseJson);
         let fileContent = fileResponseJson.content;
         console.log(fileContent);
-        const contentEncoded = Base64.encode(content);
+        const contentEncoded = btoa(content);
         
         // push to GitHub
         octokit.repos.createOrUpdateFile({
