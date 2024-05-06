@@ -23,7 +23,7 @@ async function run() {
     console.log(myToken)
     const octokit = github.getOctokit(myToken);
 
-console.log("Let's go");
+    console.log("Let's go");
     core.info("Let's go");
 
     // Get Web Modeler Milestones 
@@ -37,12 +37,13 @@ console.log("Let's go");
         "client_secret":"{{ secrets.WEB_MODELER_CLIENT_SECRET }}"})
       });
 
-    core.info(tokenResponse);
+    console.log(tokenResponse);
 
+console.log(github.context.repository_owner + "/" + github.context.repository);
 
     // Get all GH Branches
-    let branchesListResponse = await octokit.branches(github.context.repository_owner + "/" + github.context.repository);
-    core.info(branchesListResponse);
+    let branchesListResponse = await octokit.getRepo(github.context.repository_owner, github.context.repository).getBranches();
+    console.log(branchesListResponse);
 
     // Check if for every milestone exists an branch
 
