@@ -58,7 +58,8 @@ async function run() {
       },
       body: JSON.stringify({})
     });
-    let milestones = milestoneResponse.json().items;
+    console.log(milestoneResponse);
+    let milestones = milestoneResponse.json();
     console.log(milestones);
 
 
