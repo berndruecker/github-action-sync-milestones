@@ -114,7 +114,7 @@ async function run() {
         const contentEncoded = btoa(fileContent);
         
         // push to GitHub
-        octokit.rest.repos.createOrUpdateFile({
+        octokit.rest.repos.createOrUpdateFileContents({
           owner: ghOwner,
           repo: ghRepo,
           path: "src/main/resources/test.bpmn",
