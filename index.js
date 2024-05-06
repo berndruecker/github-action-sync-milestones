@@ -56,7 +56,7 @@ async function run() {
         "Content-type": "application/json",
         "Authorization": "Bearer " + webModelerToken
       },
-      body: {}
+      body: JSON.stringify({})
     });
     let milestones = milestoneResponse.json().items;
     console.log(milestones);
