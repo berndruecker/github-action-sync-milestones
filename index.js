@@ -45,8 +45,9 @@ async function run() {
       })
     });
 
-    console.log(tokenResponse);
-    let webModelerToken = tokenResponse.body.access_token;
+    const tokenJson = await tokenResponse.json();
+    console.log(tokenJson);
+    let webModelerToken = tokenJson.body.access_token;
     console.log(webModelerToken);
 
     const [ghOwner, ghRepo] = process.env.GITHUB_REPOSITORY.split("/");
