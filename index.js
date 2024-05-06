@@ -24,7 +24,7 @@ async function run() {
     const webmodelerClientId = core.getInput('webmodeler-client-id');
     const webmodelerClientSecret = core.getInput('webmodeler-client-secret');
 
-    if (!github or !webmodelerClientId or !webmodelerClientSecret) {
+    if (!github || !webmodelerClientId || !webmodelerClientSecret) {
       core.setFailed(You need to set GITHUB_TOKEN and WEB_MODELER CREDENTIALS);
     }
 
@@ -65,22 +65,23 @@ async function run() {
       }
     }).data
 
-    //console.log(ghOwner + "/" + ghRepo);
     console.log(branches);
-    //console.log(process.env.GITHUB_REPOSITORY);
 
-    // Get all GH Branches
-    //let branchesListResponse = await octokit.rest.getRepo(process.env.GITHUB_REPOSITORY).getBranches();
-    //console.log(branchesListResponse);
+    for (const milestone of miletsones) {
+      // Check if for every milestone exists an branch
+      if (!branches.some(b => b.name === "CAM_" + milestone.id)) {
+        console.log("CREATE " + milestone);
+      } else {
+        console.log("NOPE " + milestone);
 
-
-
-    // Check if for every milestone exists an branch
+      }
 
       // if not, create that branch
       // and push the model files into it
 
       // create a PR
+      
+    }
 
 
 
