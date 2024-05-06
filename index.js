@@ -32,7 +32,7 @@ async function run() {
 
     console.log(webmodelerClientId);
     console.log(webmodelerClientSecret);
-    
+
     // Get Web Modeler Milestones 
     let tokenResponse = await fetch("https://login.cloud.camunda.io/oauth/token", {
       method: "POST",
@@ -46,7 +46,7 @@ async function run() {
     });
 
     console.log(tokenResponse);
-    let webModelerToken = tokenResponse.access_token;
+    let webModelerToken = tokenResponse.body.access_token;
     console.log(webModelerToken);
 
     const [ghOwner, ghRepo] = process.env.GITHUB_REPOSITORY.split("/");
