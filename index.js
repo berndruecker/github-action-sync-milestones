@@ -21,11 +21,14 @@ async function run() {
       // myToken: ${{ secrets.GITHUB_TOKEN }}
       // https://help.github.com/en/actions/automating-your-workflow-with-github-actions/authenticating-with-the-github_token#about-the-github_token-secret
     const myToken = core.getInput('github-token');
+    const webmodelerClientId = core.getInput('webmodeler-client-id');
+    const webmodelerClientSecret = core.getInput('webmodeler-client-secret');
+
     console.log(myToken)
     const octokit = github.getOctokit(myToken);
 
-    console.log("Let's go");
-    core.info("Let's go");
+    //console.log("Let's go");
+    //core.info("Let's go");
 
     // Get Web Modeler Milestones 
     let tokenResponse = await fetch(" https://login.cloud.camunda.io/oauth/token", {
@@ -34,11 +37,13 @@ async function run() {
       body: JSON.stringify({
         "grant_type":"client_credentials",
         "audience":"api.cloud.camunda.io", 
-        "client_id":"{{ secrets.WEB_MODELER_CLIENT_ID }}", 
-        "client_secret":"{{ secrets.WEB_MODELER_CLIENT_SECRET }}"})
+        "client_id": webmodelerClientId, 
+        "client_secret":webmodelerClientSecret})
       });
 
     console.log(tokenResponse);
+    let webModelerToken = tokenResponse.body.access_token;
+    console.log(webModelerToken);
 
     const [ghOwner, ghRepo] = process.env.GITHUB_REPOSITORY.split("/");
 
@@ -51,12 +56,12 @@ async function run() {
     })
 
     console.log(ghOwner + "/" + ghRepo);
-    console.log(branches);
+    console.log(branches.data);
     //console.log(process.env.GITHUB_REPOSITORY);
 
     // Get all GH Branches
-    let branchesListResponse = await octokit.rest.getRepo(process.env.GITHUB_REPOSITORY).getBranches();
-    console.log(branchesListResponse);
+    //let branchesListResponse = await octokit.rest.getRepo(process.env.GITHUB_REPOSITORY).getBranches();
+    //console.log(branchesListResponse);
 
     // Check if for every milestone exists an branch
 
