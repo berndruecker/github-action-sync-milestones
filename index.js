@@ -51,9 +51,9 @@ async function run() {
       body: JSON.stringify({})
     });
     let milestonesJson = await milestoneResponse.json();
-    console.log(milestonesJson);
+    //console.log(milestonesJson);
     let milestones = milestonesJson.items;
-    console.log(milestones);
+    //console.log(milestones);
 
 
     // Get branches from GitHub
@@ -67,6 +67,7 @@ async function run() {
         'X-GitHub-Api-Version': '2022-11-28'
       }
     });
+    console.log(mainBranchJson);
     let mainBranchSha = mainBranchJson.commit.sha;
 
     let branchesJson = await octokit.request('GET /repos/{owner}/{repo}/branches', {
