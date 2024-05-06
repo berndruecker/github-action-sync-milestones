@@ -103,8 +103,7 @@ async function run() {
           headers: { 
             "Content-type": "application/json",
             "Authorization": "Bearer " + webModelerToken
-          },
-          body: JSON.stringify({})
+          }
         });
         console.log(fileResponse);
         let fileResponseJson = await fileResponse.json();
