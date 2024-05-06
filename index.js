@@ -19,6 +19,7 @@ module.exports = async ({ github, context }) => {
       const myToken = core.getInput('myToken');
       const octokit = github.getOctokit(myToken)
 
+    core.info("Let's go")
 
     // Get Web Modeler Milestones 
     let tokenResponse = await fetch(" https://login.cloud.camunda.io/oauth/token", {
