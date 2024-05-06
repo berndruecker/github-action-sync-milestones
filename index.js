@@ -38,11 +38,12 @@ async function run() {
         "grant_type":"client_credentials",
         "audience":"api.cloud.camunda.io", 
         "client_id": webmodelerClientId, 
-        "client_secret":webmodelerClientSecret})
-      });
+        "client_secret": webmodelerClientSecret
+      })
+    });
 
     console.log(tokenResponse);
-    let webModelerToken = tokenResponse.body.access_token;
+    let webModelerToken = tokenResponse.access_token;
     console.log(webModelerToken);
 
     const [ghOwner, ghRepo] = process.env.GITHUB_REPOSITORY.split("/");
