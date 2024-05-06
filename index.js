@@ -49,7 +49,7 @@ async function run() {
       },
       body: JSON.stringify({})
     });
-    let milestones = await milestoneResponse.json().items;
+    let milestones = await milestoneResponse.json();
     console.log(milestones);
 
 
@@ -63,13 +63,13 @@ async function run() {
       headers: {
         'X-GitHub-Api-Version': '2022-11-28'
       }
-    }).data
+    });
 
     console.log(branches);
 
-    for (const milestone of milestones) {
+    for (const milestone of milestones.items) {
       // Check if for every milestone exists an branch
-      if (!branches.some(b => b.name === "CAM_" + milestone.id)) {
+      if (!branches.data.some(b => b.name === "CAM_" + milestone.id)) {
         console.log("CREATE " + milestone);
       } else {
         console.log("NOPE " + milestone);
