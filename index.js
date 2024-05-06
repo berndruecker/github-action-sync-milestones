@@ -47,8 +47,20 @@ async function run() {
 
     const tokenJson = await tokenResponse.json();
     console.log(tokenJson);
-    let webModelerToken = tokenJson.body.access_token;
+    let webModelerToken = tokenJson.access_token;
     console.log(webModelerToken);
+
+    let milestoneResponse = await fetch("https://modeler.cloud.camunda.io/api/v1/milestones/search", {
+      method: "POST",
+      headers: { 
+        "Content-type": "application/json",
+        "Authorization": "Bearer " + webModelerToken
+      },
+      body: {}
+    });
+    let milestones = milestoneResponse.json().items;
+    console.log(milestones);
+
 
     const [ghOwner, ghRepo] = process.env.GITHUB_REPOSITORY.split("/");
 
@@ -67,6 +79,8 @@ async function run() {
     // Get all GH Branches
     //let branchesListResponse = await octokit.rest.getRepo(process.env.GITHUB_REPOSITORY).getBranches();
     //console.log(branchesListResponse);
+
+
 
     // Check if for every milestone exists an branch
 
