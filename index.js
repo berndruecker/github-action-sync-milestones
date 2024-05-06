@@ -110,18 +110,20 @@ async function run() {
         console.log(fileResponseJson);
         let fileContent = fileResponseJson.content;
         console.log(fileContent);
+        const contentEncoded = Base64.encode(content);
         
         // push to GitHub
         octokit.repos.createOrUpdateFile({
-          ghOwner,
-          ghRepo,
-          "src/main/resources",
-          "Updates synced from Camunda Web Modeler",
-          fileContent,
-          "Bernd Ruecker", // Committer
-          "bernd.ruecker@amunda.com",
-          "Bernd Ruecker", // Auhor
-          "bernd.ruecker@amunda.com"
+          owner: ghOwner,
+          repo: ghRepo,
+          path: "src/main/resources/test.bpmn",
+          message: "Updates synced from Camunda Web Modeler",
+          content: contentEncoded,
+          branch: "CAMUNDA_" + milestone.id
+                    //"Bernd Ruecker", // Committer
+          //"bernd.ruecker@amunda.com",
+          //"Bernd Ruecker", // Auhor
+          //"bernd.ruecker@amunda.com"
         });
 
       } else {
