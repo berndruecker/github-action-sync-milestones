@@ -20,9 +20,10 @@ async function run() {
       // myToken: ${{ secrets.GITHUB_TOKEN }}
       // https://help.github.com/en/actions/automating-your-workflow-with-github-actions/authenticating-with-the-github_token#about-the-github_token-secret
     const myToken = core.getInput('githubToken');
-    console.log(github.token)
-    const octokit = github.getOctokit(github.token);
+    console.log(myToken)
+    const octokit = github.getOctokit(myToken);
 
+console.log("Let's go");
     core.info("Let's go");
 
     // Get Web Modeler Milestones 
