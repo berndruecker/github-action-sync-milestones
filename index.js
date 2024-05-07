@@ -170,9 +170,9 @@ async function run() {
           //"bernd.ruecker@amunda.com",
           //"Bernd Ruecker", // Auhor
           //"bernd.ruecker@amunda.com"
-
+        });
           // deploy to production system via API
-         const deployment = await zeebe.deployResource({
+        const deployment = await zeebe.deployResource({
           name: fileResponseJson.metadata.simplePath,
           process: fileContent
 //            processFilename: path.join(process.cwd(), "process.bpmn"),        
