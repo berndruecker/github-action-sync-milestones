@@ -2,11 +2,14 @@ const core = require('@actions/core');
 const github = require('@actions/github');
 const camundaSdk = require('@camunda8/sdk');
 
+/*
 const camundaClientId = core.getInput('camunda-client-id');
 const camundaClientSecret = core.getInput('camunda-client-secret');
 const zeebeAddress = core.getInput('camunda-zeebe-address');
+*/
 
-const camunda = new camundaSdk.Camunda8({
+const camunda = new camundaSdk.Camunda8();
+/*{
   config: {
     ZEEBE_ADDRESS: zeebeAddress,
     ZEEBE_CLIENT_ID: camundaClientId,
@@ -15,7 +18,9 @@ const camunda = new camundaSdk.Camunda8({
     CAMUNDA_OAUTH_URL: 'https://login.cloud.camunda.io/oauth/token'
   }
 });
-
+*/
+const zeebe = camunda.getZeebeGrpcApiClient();
+zeebe.topology();
 
 run();
 
@@ -43,8 +48,6 @@ async function run() {
     if (!github || !webmodelerClientId || !webmodelerClientSecret) {
       core.setFailed("You need to set GITHUB_TOKEN and WEB_MODELER CREDENTIALS");
     }
-
-    const zeebe = camunda.getZeebeGrpcApiClient();
 
     // Get Web Modeler Milestones 
     let tokenResponse = await fetch("https://login.cloud.camunda.io/oauth/token", {
