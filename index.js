@@ -1,15 +1,15 @@
 const core = require('@actions/core');
 const github = require('@actions/github');
-//const Camunda8 = require('@camunda8/sdk');
+const camundaSdk = require('@camunda8/sdk');
 
-import { Camunda8 } from '@camunda8/sdk';
+//import { Camunda8 } from '@camunda8/sdk';
 
 const camundaClientId = core.getInput('camunda-client-id');
 const camundaClientSecret = core.getInput('camunda-client-secret');
 const zeebeAddress = core.getInput('camunda-zeebe-address');
 //const webmodelerClientId = core.getInput('webmodeler-client-id');
 
-const camunda = new Camunda8({
+const camunda = new camundaSdk.Camunda8({
   config: {
     ZEEBE_ADDRESS: zeebeAddress,
     ZEEBE_CLIENT_ID: camundaClientId,
