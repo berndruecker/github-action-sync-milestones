@@ -10,6 +10,7 @@ const zeebeAddress = core.getInput('camunda-zeebe-address');
 
 const camunda = new camundaSdk.Camunda8();
 /*{
+  Moved to environment variables because of https://github.com/camunda/camunda-8-js-sdk/issues/153
   config: {
     ZEEBE_ADDRESS: zeebeAddress,
     ZEEBE_CLIENT_ID: camundaClientId,
@@ -25,25 +26,10 @@ run();
 
 async function run() {
 
-  let topology = await zeebe.topology();
-  console.log(topology);
+  //let topology = await zeebe.topology();
+  //console.log(topology);
 
   try {
-    // `who-to-greet` input defined in action metadata file
-    //const nameToGreet = core.getInput('who-to-greet');
-    //console.log(`Hello ${nameToGreet}!`);
-    //const time = (new Date()).toTimeString();
-    //core.setOutput("time", time);
-    
-    // Get the JSON webhook payload for the event that triggered the workflow    
-    const payload = JSON.stringify(github.context.payload, undefined, 2)
-    //console.log(`The event payload: ${payload}`);
-
-
-      // This should be a token with access to your repository scoped in as a secret.
-      // The YML workflow will need to set myToken with the GitHub Secret Token
-      // myToken: ${{ secrets.GITHUB_TOKEN }}
-      // https://help.github.com/en/actions/automating-your-workflow-with-github-actions/authenticating-with-the-github_token#about-the-github_token-secret
     const githubToken = core.getInput('github-token');
     const webmodelerClientId = core.getInput('webmodeler-client-id');
     const webmodelerClientSecret = core.getInput('webmodeler-client-secret');
@@ -114,9 +100,11 @@ async function run() {
     console.log(branches);
 
     for (const milestone of milestones) {
+
       // Check if for every milestone exists an branch
       if (!branches.some(b => b.name === "CAMUNDA_" + milestone.id)) {
-        console.log("CREATE " + milestone.name);
+
+        console.log("CREATE branch for milestone: " + milestone.name);
 
         let branchesJson = await octokit.request('POST /repos/{owner}/{repo}/git/refs', {
           owner: ghOwner,
@@ -136,47 +124,43 @@ async function run() {
             "Authorization": "Bearer " + webModelerToken
           }
         });
-        console.log(fileResponse);
+
         let fileResponseJson = await fileResponse.json();
-        console.log(fileResponseJson);
-        let fileContent = fileResponseJson.content;
-        console.log(fileContent);
-        const contentEncoded = btoa(fileContent);
-      
-        // push to GitHub
-        octokit.rest.repos.createOrUpdateFileContents({
-          owner: ghOwner,
-          repo: ghRepo,
-          path: "src/main/resources/" + fileResponseJson.metadata.simplePath,
-          message: "Synchronized model from Camunda Web Modeler",
-          content: contentEncoded,
-          branch: "CAMUNDA_" + milestone.id
-        });
 
-        // deploy to Camunda production system via API
-        const deployment = await zeebe.deployResource({
-          name: fileResponseJson.metadata.simplePath,
-          process: Buffer.from(fileContent)
-        });
+        if (fileResponseJson.metadata.type = "BPMN") {
+          console.log("Syncing BPMN: " + fileResponseJson);
 
+          let fileContent = fileResponseJson.content;
+              
+          // push to GitHub
+          octokit.rest.repos.createOrUpdateFileContents({
+            owner: ghOwner,
+            repo: ghRepo,
+            path: "src/main/resources/" + fileResponseJson.metadata.simplePath,
+            message: "Synchronized model from Camunda Web Modeler",
+            content: btoa(fileContent),
+            branch: "CAMUNDA_" + milestone.id
+          });
+
+          // deploy to Camunda production system via API
+          const deployment = await zeebe.deployResource({
+            name: fileResponseJson.metadata.simplePath,
+            process: Buffer.from(fileContent)
+          });
+
+        } else {
+          console.log("Ignoring " + fileResponseJson.metadata);
+        }
 
       } else {
-        console.log("NOPE " + milestone.name);
-
+        console.log("Ignoring milestone that already has a branch: " + milestone.name);
       }
-
-      // if not, create that branch
-      // and push the model files into it
-
-      // create a PR
       
     }
 
 
-
   } catch (error) {
     console.log(error);
-    core.warning(error);
     core.setFailed(error.message);
   }
 }
