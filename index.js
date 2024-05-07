@@ -1,6 +1,42 @@
 const core = require('@actions/core');
 const github = require('@actions/github');
-//const { Octokit } = require("@octokit/rest");
+
+
+    const camundaClientId = core.getInput('camunda-client-id');
+    const camundaClientSecret = core.getInput('camunda-client-secret');
+    const zeebeAddress = core.getInput('camunda-zeebe-address');
+    //const webmodelerClientId = core.getInput('webmodeler-client-id');
+
+
+import { Camunda8 } from '@camunda8/sdk'
+const camunda = new Camunda8({
+  config: {
+    ZEEBE_ADDRESS: zeebeAddress,
+    ZEEBE_CLIENT_ID: camundaClientId,
+    ZEEBE_CLIENT_SECRET: camundaClientSecret,
+    ZEEBE_AUTHORIZATION_SERVER_URL: 'https://login.cloud.camunda.io/oauth/token'
+  },
+})
+
+//    ZEEBE_ADDRESS: 'localhost:26500'
+//    ZEEBE_CLIENT_ID: 'zeebe'
+//    ZEEBE_CLIENT_SECRET: 'zecret'
+//    CAMUNDA_OAUTH_URL: 'http://localhost:18080/auth/realms/camunda-platform/protocol/openid-connect/token'
+
+//export ZEEBE_ADDRESS='8b160d8d-ce5d-4435-aabb-a85211cd280a.syd-1.zeebe.camunda.io:443'
+//export ZEEBE_CLIENT_ID='b-vWK1738v.--~beFdNlO8baKP7fZCUQ'
+//export ZEEBE_CLIENT_SECRET='bY5hyY6yb.cKfJXZvIZIqg.OjrD5yWraYzLMaoMkMcxuf-Tfo-RDaypqDJjV0YLb'
+//export ZEEBE_AUTHORIZATION_SERVER_URL=
+/*
+export ZEEBE_REST_ADDRESS='https://syd-1.zeebe.camunda.io/8b160d8d-ce5d-4435-aabb-a85211cd280a'
+export ZEEBE_GRPC_ADDRESS='grpcs://8b160d8d-ce5d-4435-aabb-a85211cd280a.syd-1.zeebe.camunda.io:443'
+export ZEEBE_TOKEN_AUDIENCE='zeebe.camunda.io'
+export CAMUNDA_CLUSTER_ID='8b160d8d-ce5d-4435-aabb-a85211cd280a'
+export CAMUNDA_CLUSTER_REGION='syd-1'
+export CAMUNDA_CREDENTIALS_SCOPES='Zeebe,Operate'
+export CAMUNDA_OPERATE_BASE_URL='https://syd-1.operate.camunda.io/8b160d8d-ce5d-4435-aabb-a85211cd280a'
+export CAMUNDA_OAUTH_URL='https://login.cloud.camunda.io/oauth/token'
+*/
 
 run();
 
@@ -28,6 +64,8 @@ async function run() {
     if (!github || !webmodelerClientId || !webmodelerClientSecret) {
       core.setFailed("You need to set GITHUB_TOKEN and WEB_MODELER CREDENTIALS");
     }
+
+    const zeebe = camunda.getZeebeGrpcApiClient();
 
     // Get Web Modeler Milestones 
     let tokenResponse = await fetch("https://login.cloud.camunda.io/oauth/token", {
@@ -134,7 +172,10 @@ async function run() {
           //"bernd.ruecker@amunda.com"
 
           // deploy to production system via API
-
+         const deployment = await zeebe.deployResource({
+          name: fileResponseJson.metadata.simplePath,
+          process: fileContent
+//            processFilename: path.join(process.cwd(), "process.bpmn"),        
         });
 
       } else {
