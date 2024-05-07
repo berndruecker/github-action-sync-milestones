@@ -1,8 +1,8 @@
 const core = require('@actions/core');
 const github = require('@actions/github');
-const Camunda8 = require('@camunda8/sdk');
+//const Camunda8 = require('@camunda8/sdk');
 
-
+import { Camunda8 } from '@camunda8/sdk';
 
 const camundaClientId = core.getInput('camunda-client-id');
 const camundaClientSecret = core.getInput('camunda-client-secret');
