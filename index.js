@@ -94,7 +94,7 @@ async function run() {
             "field": "created",
             "direction": "DESC"
         }],
-        size: 50
+        size: 10
       })
     });
     let milestonesJson = await milestoneResponse.json();
