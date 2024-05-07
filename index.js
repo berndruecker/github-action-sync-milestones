@@ -26,7 +26,7 @@ run();
 async function run() {
 
   let topology = await zeebe.topology();
-  console.log(topology):
+  console.log(topology);
 
   try {
     // `who-to-greet` input defined in action metadata file
