@@ -95,9 +95,9 @@ async function run() {
       }
     });
 
-    console.log(branchesJson);
+    //console.log(branchesJson);
     let branches = branchesJson.data;
-    console.log(branches);
+    //console.log(branches);
 
     for (const milestone of milestones) {
 
