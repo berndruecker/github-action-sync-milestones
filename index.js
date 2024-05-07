@@ -14,10 +14,10 @@ const camunda = new camundaSdk.Camunda8({
     ZEEBE_ADDRESS: zeebeAddress,
     ZEEBE_CLIENT_ID: camundaClientId,
     ZEEBE_CLIENT_SECRET: camundaClientSecret,
-    ZEEBE_AUTHORIZATION_SERVER_URL: 'https://login.cloud.camunda.io/oauth/token',
-    CAMUNDA_OAUTH_URL: 'https://login.cloud.camunda.io/oauth/token',
-  },
-})
+//    ZEEBE_AUTHORIZATION_SERVER_URL: 'https://login.cloud.camunda.io/oauth/token',
+    CAMUNDA_OAUTH_URL: 'https://login.cloud.camunda.io/oauth/token'
+  }
+});
 
 //    ZEEBE_ADDRESS: 'localhost:26500'
 //    ZEEBE_CLIENT_ID: 'zeebe'
