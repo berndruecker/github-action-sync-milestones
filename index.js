@@ -156,7 +156,7 @@ async function run() {
         // deploy to Camunda production system via API
         const deployment = await zeebe.deployResource({
           name: fileResponseJson.metadata.simplePath,
-          process: fileContent
+          process: Buffer.from(fileContent)
         });
 
 
