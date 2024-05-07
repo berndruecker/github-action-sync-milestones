@@ -2,12 +2,9 @@ const core = require('@actions/core');
 const github = require('@actions/github');
 const camundaSdk = require('@camunda8/sdk');
 
-//import { Camunda8 } from '@camunda8/sdk';
-
 const camundaClientId = core.getInput('camunda-client-id');
 const camundaClientSecret = core.getInput('camunda-client-secret');
 const zeebeAddress = core.getInput('camunda-zeebe-address');
-//const webmodelerClientId = core.getInput('webmodeler-client-id');
 
 const camunda = new camundaSdk.Camunda8({
   config: {
@@ -19,25 +16,6 @@ const camunda = new camundaSdk.Camunda8({
   }
 });
 
-//    ZEEBE_ADDRESS: 'localhost:26500'
-//    ZEEBE_CLIENT_ID: 'zeebe'
-//    ZEEBE_CLIENT_SECRET: 'zecret'
-//    CAMUNDA_OAUTH_URL: 'http://localhost:18080/auth/realms/camunda-platform/protocol/openid-connect/token'
-
-//export ZEEBE_ADDRESS='8b160d8d-ce5d-4435-aabb-a85211cd280a.syd-1.zeebe.camunda.io:443'
-//export ZEEBE_CLIENT_ID='b-vWK1738v.--~beFdNlO8baKP7fZCUQ'
-//export ZEEBE_CLIENT_SECRET='bY5hyY6yb.cKfJXZvIZIqg.OjrD5yWraYzLMaoMkMcxuf-Tfo-RDaypqDJjV0YLb'
-//export ZEEBE_AUTHORIZATION_SERVER_URL=
-/*
-export ZEEBE_REST_ADDRESS='https://syd-1.zeebe.camunda.io/8b160d8d-ce5d-4435-aabb-a85211cd280a'
-export ZEEBE_GRPC_ADDRESS='grpcs://8b160d8d-ce5d-4435-aabb-a85211cd280a.syd-1.zeebe.camunda.io:443'
-export ZEEBE_TOKEN_AUDIENCE='zeebe.camunda.io'
-export CAMUNDA_CLUSTER_ID='8b160d8d-ce5d-4435-aabb-a85211cd280a'
-export CAMUNDA_CLUSTER_REGION='syd-1'
-export CAMUNDA_CREDENTIALS_SCOPES='Zeebe,Operate'
-export CAMUNDA_OPERATE_BASE_URL='https://syd-1.operate.camunda.io/8b160d8d-ce5d-4435-aabb-a85211cd280a'
-export CAMUNDA_OAUTH_URL='https://login.cloud.camunda.io/oauth/token'
-*/
 
 run();
 
@@ -158,7 +136,7 @@ async function run() {
         let fileContent = fileResponseJson.content;
         console.log(fileContent);
         const contentEncoded = btoa(fileContent);
-        
+      
         // push to GitHub
         octokit.rest.repos.createOrUpdateFileContents({
           owner: ghOwner,
@@ -167,17 +145,14 @@ async function run() {
           message: "Synchronized model from Camunda Web Modeler",
           content: contentEncoded,
           branch: "CAMUNDA_" + milestone.id
-                    //"Bernd Ruecker", // Committer
-          //"bernd.ruecker@amunda.com",
-          //"Bernd Ruecker", // Auhor
-          //"bernd.ruecker@amunda.com"
         });
-          // deploy to production system via API
+
+        // deploy to Camunda production system via API
         const deployment = await zeebe.deployResource({
           name: fileResponseJson.metadata.simplePath,
           process: fileContent
-//            processFilename: path.join(process.cwd(), "process.bpmn"),        
         });
+
 
       } else {
         console.log("NOPE " + milestone.name);
