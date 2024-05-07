@@ -128,7 +128,7 @@ async function run() {
         let fileResponseJson = await fileResponse.json();
 
         if (fileResponseJson.metadata.type = "BPMN") {
-          console.log("Syncing BPMN: " + fileResponseJson);
+          console.log("Syncing BPMN: " + JSON.stringify(fileResponseJson));
 
           let fileContent = fileResponseJson.content;
               
@@ -149,7 +149,7 @@ async function run() {
           });
 
         } else {
-          console.log("Ignoring " + fileResponseJson.metadata);
+          console.log("Ignoring " + JSON.stringify(fileResponseJson.metadata));
         }
 
       } else {
