@@ -127,8 +127,8 @@ async function run() {
 
         let fileResponseJson = await fileResponse.json();
 
-        if (fileResponseJson.metadata.type = "BPMN") {
-          console.log("Syncing BPMN: " + JSON.stringify(fileResponseJson));
+        if (fileResponseJson.metadata.simplePath.endsWith(".bpmn")) {
+          console.log("Syncing BPMN: " + JSON.stringify(fileResponseJson.metadata));
 
           let fileContent = fileResponseJson.content;
               
